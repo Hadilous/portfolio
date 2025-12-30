@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/* ----------------- THEME COLORS & ANIMATIONS ----------------- */
+@theme {
+  --color-border: hsl(var(--border));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-card: hsl(var(--card));
+
+  /* Existing animations */
+  --animate-float: float 6s ease-in-out infinite; /* for the text */
+  --animate-pulse-subtle: pulse-subtle 4s ease-in-out infinite; /* old stars (not used) */
+  --animate-fade-in: fade-in 0.7s ease-out forwards;
+  --animate-fade-in-delay-1: fade-in 0.7s ease-out 0.2s forwards;
+  --animate-fade-in-delay-2: fade-in 0.7s ease-out 0.4s forwards;
+  --animate-fade-in-delay-3: fade-in 0.7s ease-out 0.6s forwards;
+  --animate-fade-in-delay-4: fade-in 0.7s ease-out 0.8s forwards;
+
+  /* Blossom and Petal Animations */
+  --animate-blossom: blossom-float 5s ease-in-out infinite;
+  --animate-petal: petal-fall 8s linear infinite;
+
+  /* Keyframes */
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Blossom float animation */
+  @keyframes blossom-float {
+    0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+    50% { transform: translateY(-10px) translateX(4px) scale(1.06); }
+  }
+
+  /* Falling petal animation */
+  @keyframes petal-fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
+  }
+}
+
+/* ----------------- BASE STYLES ----------------- */
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --primary: 340 70% 80%; /* soft pink */
+    --primary-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+  }
+
+  .dark {
+    --background: 222 47% 4%;
+    --foreground: 213 31% 91%;
+    --card: 222 47% 8%;
+    --primary: 340 70% 75%; /* slightly deeper soft pink for dark mode */
+    --primary-foreground: 213 31% 91%;
+    --border: 217 33% 20%;
+  }
+
+  * { @apply border-border; }
+  html { @apply scroll-smooth; }
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-feature-settings: "rling" 1, "calt" 1;
+  }
+}
+
+
+/* ----------------- CONTAINERS & UTILITIES ----------------- */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= 640px) { max-width: 640px; }
+  @media (width >= 768px) { max-width: 768px; }
+  @media (width >= 1024px) { max-width: 1024px; }
+  @media (width >= 1280px) { max-width: 1280px; }
+  @media (width >= 1400px) { max-width: 1400px; }
+}
+
+@utility test-glow {
+  @apply relative;
+  text-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+}
+
+@utility card-hover {
+  @apply transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg;
+}
+
+@utility gradient-border {
+  @apply relative rounded-md;
+  background: linear-gradient(to right, hsl(var(--card)), hsl(var(--card)));
+  background-clip: padding-box;
+  border: 1px solid transparent;
+}
+
+@utility cosmic-button {
+  @apply px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium transition-all duration-300 hover:shadow-[0_0_10px_rgba(139,92,246,0.5)] hover:scale-105 active:scale-95;
+}
+
+
+
+/* Blossoms and petals remain unchanged */
+@utility blossom {
+  @apply absolute;
+  pointer-events: none;
+  transform-origin: center;
+}
+@utility petal-shape {
+  @apply absolute w-2/5 h-2/5 bg-gradient-to-b from-pink-300 to-pink-500 rounded-full;
+  top: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  box-shadow: 0 0 6px rgba(255, 105, 180, 0.6);
+}
+@keyframes blossom-float {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+  25% { transform: translateY(-6px) translateX(3px) scale(1.05); }
+  50% { transform: translateY(-12px) translateX(6px) scale(1.1); }
+  75% { transform: translateY(-6px) translateX(3px) scale(1.05); }
+}
+.animate-blossom { animation: blossom-float 5s ease-in-out infinite; }
+
+/* ------------------- Falling leaves with sway ------------------- */
+@utility leaf {
+  position: fixed;
+  background: linear-gradient(135deg, #4caf50 0%, #81c784 70%, #a5d6a7 100%);
+  border-radius: 50% 40% 50% 40%;
+  opacity: 0.9;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Leaf fall + sway + rotation combined into one animation */
+@keyframes leaf-fall-sway {
+  0% { transform: translateX(0px) translateY(0px) rotate(0deg); opacity: 1; }
+  25% { transform: translateX(var(--sway-amplitude)) translateY(25vh) rotate(90deg); opacity: 0.9; }
+  50% { transform: translateX(calc(-1 * var(--sway-amplitude))) translateY(60vh) rotate(180deg); opacity: 0.8; }
+  75% { transform: translateX(calc(var(--sway-amplitude)/2)) translateY(90vh) rotate(270deg); opacity: 0.7; }
+  100% { transform: translateX(0px) translateY(120vh) rotate(360deg); opacity: 0; }
+}
+
+/* Apply animation */
+.animate-leaf {
+  animation-name: leaf-fall-sway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-duration: inherit; /* from React inline style */
+  animation-delay: inherit;    /* from React inline style */
+}
+
+/* ----------------- ROOT ----------------- */
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}

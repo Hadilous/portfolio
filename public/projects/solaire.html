@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Styled Planetary System</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: #000011; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    100
+  );
+  camera.position.set(0, 2.5, 17);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  document.body.appendChild(renderer.domElement);
+
+  // --- Lights ---
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+  scene.add(ambientLight);
+
+  const sunLight = new THREE.PointLight(0xffffff, 1.5, 100);
+  sunLight.castShadow = true;
+  scene.add(sunLight);
+
+  // --- Stars (background) ---
+  function addStars() {
+    const starGeo = new THREE.BufferGeometry();
+    const starCount = 500;
+    const positions = [];
+    for (let i = 0; i < starCount; i++) {
+      positions.push(
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 100
+      );
+    }
+    starGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.2 });
+    const stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
+  }
+  addStars();
+
+  // --- Sun ---
+  const sunGeo = new THREE.SphereGeometry(2, 32, 32);
+  const sunMat = new THREE.MeshBasicMaterial({ color: 0xffff33 }); // bright yellow
+  const sun = new THREE.Mesh(sunGeo, sunMat);
+  sun.position.set(0, 0, 0);
+  scene.add(sun);
+
+  // --- Planet ---
+  const planetGeo = new THREE.SphereGeometry(1, 32, 32);
+  const planetMat = new THREE.MeshStandardMaterial({ color: 0x1e90ff, roughness: 0.4, metalness: 0.3 });
+  const planet = new THREE.Mesh(planetGeo, planetMat);
+  planet.castShadow = true;
+  scene.add(planet);
+
+  const planetOrbitRadius = 6;
+  let planetAngle = 0;
+  const planetSpeed = 0.02;
+
+  // --- Moon ---
+  const moonGeo = new THREE.SphereGeometry(0.3, 16, 16);
+  const moonMat = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 0.5 });
+  const moon = new THREE.Mesh(moonGeo, moonMat);
+  moon.castShadow = true;
+  scene.add(moon);
+
+  const moonOrbitRadius = 2;
+  let moonAngle = 0;
+  const moonSpeed = 0.05;
+
+  // --- Optional: Orbit trails (lines) ---
+  function addOrbitLine(radius) {
+    const points = [];
+    for (let i = 0; i <= 64; i++) {
+      const angle = (i / 64) * 2 * Math.PI;
+      points.push(new THREE.Vector3(radius * Math.cos(angle), 0, radius * Math.sin(angle)));
+    }
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.2, transparent: true });
+    const line = new THREE.LineLoop(geometry, material);
+    scene.add(line);
+  }
+  addOrbitLine(planetOrbitRadius);
+  addOrbitLine(planetOrbitRadius + moonOrbitRadius);
+
+  // --- Animation Loop ---
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Sun rotation
+    sun.rotation.y += 0.005;
+
+    // Planet orbit around Sun
+    planetAngle += planetSpeed;
+    planet.position.x = planetOrbitRadius * Math.cos(planetAngle);
+    planet.position.z = planetOrbitRadius * Math.sin(planetAngle);
+    planet.position.y = 0;
+    planet.rotation.y += 0.02;
+
+    // Moon orbit around Planet
+    moonAngle += moonSpeed;
+    moon.position.x = planet.position.x + moonOrbitRadius * Math.cos(moonAngle);
+    moon.position.z = planet.position.z + moonOrbitRadius * Math.sin(moonAngle);
+    moon.position.y = 0;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // --- Handle Resize ---
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+
+</body>
+</html>
