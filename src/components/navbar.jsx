@@ -30,9 +30,7 @@ export const Navbar = () =>{
     <nav className={cn("fixed w-full z-40 transition-all duration-300", isScrolled ? "py-3 bg-background/80 backdrop-blur-md shadow-xs" : "py-5")}>
 
         <div className="container flex items-center justify-between" href="#hero">
-            <a className="text-xl font-bold text-primary flex items-center">
-                <span className="relative z-10">
-                    <a className="text-xl font-bold text-primary flex items-center space-x-3">
+            <a className="text-xl font-bold text-primary flex items-center space-x-3">
                        <img src="./pfp1.jpg" alt="Profile" className="w-10 h-10 rounded-full object-cover cursor-pointer border border-primary"
                             onClick={() => setIsImageOpen(true)}/>
                         <span className="relative z-10 flex items-center space-x-1">
@@ -41,8 +39,6 @@ export const Navbar = () =>{
                         </span>
 
                     </a>
-                </span>
-            </a>
             {/*for desktop*/}
             <div className="hidden md:flex space-x-8">
                 {navitems.map((item, key) => (

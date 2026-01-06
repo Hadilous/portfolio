@@ -78,9 +78,16 @@ const projects = [
     description: "a solaire scene using three.js in an html file.", 
     image:"./projects/solaire.png", 
     tags: ["HTML","CSS","Three.js"], 
-    demoUrl: "./projects/solaire.html", 
-    category:"design" 
+    demoUrl: "./projects/solaire.html",     category:["design","website"], 
 },
+{   id: 11, 
+    title: "Human anatomy", 
+    description: "An academic project for the human anatomy with 3D model.", 
+    image:"./projects/human.png", 
+    tags: ["React","javascript","CSS","Three.js","Blender"], 
+    demoUrl: "https://humanannatomy.netlify.app/", 
+
+    category:"website" }, 
 ];
 
 const categories = ["all", "website", "design"];
