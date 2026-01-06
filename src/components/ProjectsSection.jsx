@@ -78,7 +78,8 @@ const projects = [
     description: "a solaire scene using three.js in an html file.", 
     image:"./projects/solaire.png", 
     tags: ["HTML","CSS","Three.js"], 
-    demoUrl: "./projects/solaire.html",     category:["design","website"], 
+    demoUrl: "./projects/solaire.html",     
+    category:"design" 
 },
 {   id: 11, 
     title: "Human anatomy", 
