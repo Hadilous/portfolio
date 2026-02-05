@@ -1,4 +1,4 @@
-import { Facebook, Mail, Linkedin, MapPin, Phone, Send } from "lucide-react";
+import { Facebook,Github, Mail, Linkedin, MapPin, Phone, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
@@ -95,6 +95,9 @@ export const ContactSection = () => {
                                 </a>
                                 <a href="https://www.facebook.com/share/16WbXxQ3DJ/" target="_blank">
                                     <Facebook />
+                                </a>
+                                <a href="https://github.com/HadilAdimi" target="_blank">
+                                    <Github />
                                 </a>
                             </div>
                         </div>

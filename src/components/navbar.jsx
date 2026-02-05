@@ -31,8 +31,7 @@ export const Navbar = () =>{
 
         <div className="container flex items-center justify-between" href="#hero">
             <a className="text-xl font-bold text-primary flex items-center space-x-3">
-                       <img src="./pfp1.jpg" alt="Profile" className="w-10 h-10 rounded-full object-cover cursor-pointer border border-primary"
-                            onClick={() => setIsImageOpen(true)}/>
+                       
                         <span className="relative z-10 flex items-center space-x-1">
                             <span className="text-glow text-foreground">Hadil</span> {" "}
                             <span> Portfolio</span>
